@@ -15,10 +15,11 @@ import           Prelude.Compat
 import           Servant
 
 newtype SearchRequest = SearchRequest
-  { query :: String
+  { tag :: String
   } deriving (Generic)
 
 instance FromJSON SearchRequest
+instance ToJSON SearchRequest
 
 data EsSearchResult = EsSearchResult
   { title       :: String
@@ -30,8 +31,9 @@ data EsSearchResult = EsSearchResult
 instance ToJSON EsSearchResult
 instance FromJSON EsSearchResult
 
-newtype SearchResults = SearchResults
-  { results :: [EsSearchResult]
+data SearchResults = SearchResults
+  { searchRequest :: SearchRequest
+  , results :: [EsSearchResult]
   } deriving (Generic)
 
 instance ToJSON SearchResults

@@ -13,7 +13,7 @@ import           Database.V5.Bloodhound.Client (parseEsResponse)
 import           Database.V5.Bloodhound.Types  (EsResult (..))
 import           Network.HTTP.Client           (defaultManagerSettings)
 
-search :: String -> IO SearchResults
+search :: String -> IO [EsSearchResult]
 search searchString =
   runBH' $ do
     reply <- searchByType indexName mapping search
@@ -37,5 +37,5 @@ parse reply = do
     Left err            -> undefined
     Right searchResults -> return searchResults
 
-extractSearchResult :: SearchResult EsSearchResult -> SearchResults
-extractSearchResult res = SearchResults $ fmap hitSource (hits $ searchHits res) >>= maybeToList
+extractSearchResult :: SearchResult EsSearchResult -> [EsSearchResult]
+extractSearchResult res = fmap hitSource (hits $ searchHits res) >>= maybeToList

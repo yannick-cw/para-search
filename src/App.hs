@@ -8,20 +8,19 @@
 module App where
 
 import           Api
+import           Control.Monad.IO.Class   (liftIO)
 import           EsSearch                 (search)
 import           Network.Wai.Handler.Warp
 import           Prelude                  ()
 import           Prelude.Compat
 import           Servant
 import           System.IO.Error
-import           Control.Monad.IO.Class        (liftIO)
-
 
 paraServer :: Server ParaSearchApi
 paraServer = search'
 
 search' :: SearchRequest -> Handler SearchResults
-search' request = liftIO (search (query request))
+search' request = liftIO $ fmap (SearchResults request) (search (tag request))
 
 startServer :: IO ()
 startServer =
